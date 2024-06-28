@@ -127,6 +127,7 @@ tr:nth-child(even) {
             <a href="registration.php" target="_blank" rel="noopener noreferrer" class="btn btn-primary">ADD Users</a>
             </div>
         </div>
+        <?php  if ($user_details) { ?>
         <table>
             <thead>
                 <th>User ID</th>
@@ -139,7 +140,6 @@ tr:nth-child(even) {
             </thead>
             <tbody>
                 <?php
-                if ($user_details) {
                 foreach ($user_details as  $details) { ?>
                     <tr id = "<?=$details['user_id']?>">
                         <td><?=$details['user_id']?></td>
@@ -154,12 +154,12 @@ tr:nth-child(even) {
                         Add Sales</button>
                         <?php } ?>
                     </tr>
-                <?php }  }      else{
-                    echo "NO Records Found . Please Add ADMIN or Head ID First.";
-                } ?>
-
+                <?php } ?>
             </tbody>
         </table>
+        <?php  }else{
+            echo "NO Records Found . Please Add ADMIN or Head ID First.";
+        } ?>
     </div>
 </body>
 
