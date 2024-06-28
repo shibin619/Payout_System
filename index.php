@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 }
-$sql3 = "SELECT a.user_id,a.name,a.email,a.type,ifnull(sum(b.amount),0) as `amount` ,ifnull(sum(c.amount),0) as commision FROM `users` a LEFT JOIN sales_details b on b.user_id = a.id LEFT JOIN commision_details c on a.id =c.user_id GROUP BY a.user_id";
+$sql3 = "SELECT if(a.ref_id=0,'Admin',d.user_id) as ref_id,a.user_id,a.name,a.email,a.type,ifnull(sum(b.amount),0) as `amount` ,ifnull(sum(c.amount),0) as commision FROM `users` a LEFT JOIN sales_details b on b.user_id = a.id LEFT JOIN commision_details c on a.id =c.user_id LEFT join `users` d on d.user_id =a.ref_id GROUP BY a.user_id";
 $result3 = $conn->query($sql3);
 if ($result3->num_rows > 0) {
     while($row3 = $result3->fetch_assoc()) {
@@ -121,44 +121,46 @@ tr:nth-child(even) {
 </head>
 <body>
     <div class="container-fluid">
-    <div class="row">
-    <div class="col-md-10 mt-3"><h2>Affliate Users</h2></div>
+        <div class="row">
+            <div class="col-md-10 mt-3"><h2>Affliate Users</h2></div>
+            <div class="col-md-2 mt-5 mb-2">
+            <a href="registration.php" target="_blank" rel="noopener noreferrer" class="btn btn-primary">ADD Users</a>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Direct Parent</th>
+                <th>Sales Amount</th>
+                <th>Commision</th>
+                <th>Add Sales</th>
+            </thead>
+            <tbody>
+                <?php
+                if ($user_details) {
+                foreach ($user_details as  $details) { ?>
+                    <tr id = "<?=$details['user_id']?>">
+                        <td><?=$details['user_id']?></td>
+                        <td><?=$details['name']?></td>
+                        <td><?=$details['email']?></td>
+                        <td><?=$details['ref_id']?></td>
+                        <td><?=number_format((float)$details['amount'], 2, '.', '');?></td>
+                        <td><?=number_format((float)$details['commision'], 2, '.', '');?></td>
+                        <td> 
+                            <?php if($details['type'] =="U") { ?>
+                        <button type="button" class="btn btn-success add_commision_btn" id="add_commision_btn"  data-bs-toggle="modal" data-bs-target="#add_commision" data-id ="<?=$details['user_id']?>">
+                        Add Sales</button>
+                        <?php } ?>
+                    </tr>
+                <?php }  }      else{
+                    echo "NO Records Found . Please Add ADMIN or Head ID First.";
+                } ?>
 
-    <div class="col-md-2 mt-5 mb-2">
-    <a href="registration.php" target="_blank" rel="noopener noreferrer" class="btn btn-primary">ADD Users</a>
+            </tbody>
+        </table>
     </div>
-</div>
-<table>
-    <thead>
-        <th>User ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Sales Amount</th>
-        <th>Commision</th>
-        <th>Add Sales</th>
-    </thead>
-    <tbody>
-        <?php
-         foreach ($user_details as  $details) { ?>
-            <tr id = "<?=$details['user_id']?>">
-                <td><?=$details['user_id']?></td>
-                <td><?=$details['name']?></td>
-                <td><?=$details['email']?></td>
-                <td><?=number_format((float)$details['amount'], 2, '.', '');?></td>
-                <td><?=number_format((float)$details['commision'], 2, '.', '');?></td>
-                <td> 
-                    <?php if($details['type'] =="U") { ?>
-                <button type="button" class="btn btn-success add_commision_btn" id="add_commision_btn"  data-bs-toggle="modal" data-bs-target="#add_commision" data-id ="<?=$details['user_id']?>">
-                Add Sales</button>
-                <?php } ?>
-            </tr>
-        <?php } ?>
-
-    </tbody>
-</table>
-    </div>
-
-
 </body>
 
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
