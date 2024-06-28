@@ -19,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $user_id = 'AFPS'.($row1['user_count']+1);
             }
         }
-        // echo $user_id.'-'.$name.'-'.$email.'-'.$ref_id;die;
 
         $sql9 = "SELECT user_id FROM `users` WHERE user_id = '$user_id'";
         $result9= $conn->query($sql9);
@@ -161,36 +160,26 @@ tr:nth-child(even) {
 
 
 </body>
-<!-- The Modal -->
+
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
 <div class="modal fade add_commision" id="add_commision">
   <div class="modal-dialog">
     <div class="modal-content">
-
-      <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Add Sales Details</h4>
-        
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
-      <!-- Modal body -->
       <div class="modal-body">
- 
             <div>
                 <h6>User ID:</h6>
                 <input type="text" id="suser_id" class="form-control suser_id"  disabled>
             </div>
             <div>
             <h6>Please Enter sales amount:</h6>
-
                 <input type="hidden"  class="form-control" id="suserid" name="suserid" >
                 <input type="number" name="amount" min=0 class="form-control" id="amount" required>
             </div>
- 
       </div>
-
-      <!-- Modal footer -->
       <div class="modal-footer">
         <input type="submit" class="btn btn-primary" value="Add Sale" name="add_sale">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
